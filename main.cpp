@@ -71,11 +71,11 @@ void ArpRequest(eth_arp_packet& packet,
 
 void ArpReply(eth_arp_packet& packet,
               uint8_t* myMac,
-              uint8_t* dstMac,
-              uint32_t dstIp,
-              uint32_t fakeIp) {
+              uint8_t* senderMac,
+              uint32_t senderIp,
+              uint32_t targetIp) {
 
-    memcpy(packet.eth.dst_mac, dstMac, 6);
+    memcpy(packet.eth.dst_mac, senderMac, 6);
     memcpy(packet.eth.src_mac, myMac, 6);
     packet.eth.ethertype = htons(ETHERTYPE_ARP);
 
@@ -86,10 +86,10 @@ void ArpReply(eth_arp_packet& packet,
     packet.arp.op  = htons(ARP_REPLY);
 
     memcpy(packet.arp.smac, myMac, 6);
-    packet.arp.sip = htonl(fakeIp);
+    packet.arp.sip = htonl(targetIp);
 
-    memcpy(packet.arp.tmac, dstMac, 6);
-    packet.arp.tip = htonl(dstIp);
+    memcpy(packet.arp.tmac, senderMac, 6);
+    packet.arp.tip = htonl(senderIp);
 }
 
 void getMac(pcap_t* pcap, uint8_t* myMac, uint32_t myIp, uint32_t targetIp, uint8_t* resultMac) {
